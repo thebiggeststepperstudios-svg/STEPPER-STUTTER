@@ -21,9 +21,9 @@ cmake --build build --config Release --parallel
 
 Extract `StepperStutter-vst3.zip`. Copy `STEPPER STUTTER.vst3` into the per-user VST3 folder:
 
-`%LOCALAPPDATA%\Programs\Common\VST3`
+`C:\Program Files\Common Files\VST3`
 
-If your DAW scans a different VST3 folder, use that folder instead. Restart or rescan plugins in the DAW. Standalone use requires no installation: run `StepperStutter.exe`.
+Copy the complete `STEPPER STUTTER.vst3` folder into that location, so the result is `C:\Program Files\Common Files\VST3\STEPPER STUTTER.vst3`. Do not copy only the binary from inside the bundle. Restart or rescan plugins in the DAW. Standalone use requires no installation: run `StepperStutter.exe`.
 
 ## Parameters
 
@@ -57,3 +57,4 @@ All plugin controls are automatable and saved with the host project/preset throu
 Audio formats are mono and stereo. Processing supports host sample rates from 44.1 to 192 kHz and uses preallocated ring and capture buffers, parameter smoothing for wet mix and gain, and short repeat fades. Host tempo is used when supplied; the manual BPM parameter is the fallback. The effect reports a four-second tail and has no algorithmic lookahead latency.
 
 The UI is drawn with native vector rectangles and a restricted retro palette; it does not bundle a third-party font or bitmap. The fixed-size editor is 640 × 400 logical pixels.
+
