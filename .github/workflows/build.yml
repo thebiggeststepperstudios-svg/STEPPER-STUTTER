@@ -1,0 +1,40 @@
+name: Windows plugin build
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+      - uses: lukka/get-cmake@latest
+      - name: Configure
+        run: cmake -S . -B build -A x64 -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build --config Release --parallel
+      - name: Package VST3
+        shell: pwsh
+        run: |
+          $plugin = Get-ChildItem build -Recurse -Directory -Filter "STEPPER STUTTER.vst3" | Select-Object -First 1
+          if (-not $plugin) { throw "VST3 bundle was not produced" }
+          Compress-Archive -Path $plugin.FullName -DestinationPath StepperStutter.vst3.zip -Force
+      - name: Locate Standalone
+        shell: pwsh
+        run: |
+          $app = Get-ChildItem build -Recurse -File -Filter "STEPPER STUTTER.exe" | Select-Object -First 1
+          if (-not $app) { throw "Standalone executable was not produced" }
+          Copy-Item $app.FullName StepperStutter.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: StepperStutter-vst3
+          path: StepperStutter.vst3.zip
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: StepperStutter-standalone
+          path: StepperStutter.exe
+          if-no-files-found: error
